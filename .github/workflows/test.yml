@@ -7,8 +7,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-        - ubuntu-20.04
-        - macos-11
+        - ubuntu-22.04
+        - macos-13
         # Build binaries on older systems to require lower versions of libc and
         # other system libraries.
 
@@ -40,10 +40,6 @@ jobs:
         - 4.10.2
         - 4.09.1
         - 4.08.1
-        - 4.07.1
-        - 4.06.1
-        - 4.05.0
-        - 4.04.2
         include:
         - os: macos-latest
           ocaml: 4.12.1
@@ -56,7 +52,7 @@ jobs:
     runs-on: ${{matrix.os}}
     steps:
     - uses: actions/checkout@v2
-    - uses: avsm/setup-ocaml@v2
+    - uses: avsm/setup-ocaml@v3
       with:
         ocaml-compiler: ${{matrix.ocaml}}
 
@@ -87,6 +83,9 @@ jobs:
     - name: Build
       run: opam exec -- make build
 
+    # The @compatible alias can be removed since due to a constraint in
+    # cmdliner, we can no longer test against OCaml < 4.08. Remove it if we
+    # commit to not supporting older versions of OCaml.
     - name: Test
       if: ${{runner.os != 'Windows'}}
       run: |

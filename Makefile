@@ -10,7 +10,7 @@ TEST := @runtest
 
 .PHONY : test
 test : build
-	dune build -p bisect_ppx $(TEST)
+	NO_COLOR=yes dune build -p bisect_ppx $(TEST)
 
 .PHONY : promote
 promote :
